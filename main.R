@@ -194,8 +194,8 @@ make_ranked_log2fc <- function(labeled_results, id2gene_path) {
     mutate(ensembl_id = sub("\\..*", "", ensembl_id))
   
   labeled_results %>%
-    mutate(genes = sub("\\..*", "", genes)) %>%
-    left_join(id2gene, by = c("genes" = "ensembl_id")) %>%
+    mutate(genes_stripped = sub("\\..*", "", genes)) %>%  # new column, don't overwrite genes
+    left_join(id2gene, by = c("genes_stripped" = "ensembl_id")) %>%
     filter(!is.na(gene_symbol) & !is.na(log2FoldChange)) %>%
     group_by(gene_symbol) %>%
     slice_max(abs(log2FoldChange), n = 1) %>%
